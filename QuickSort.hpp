@@ -4,6 +4,8 @@
 //  August 1, 2018
 //  CS 228 Final Project
 
+// NEED TO ADD: timer
+
 #ifndef QuickSort_hpp
 #define QuickSort_hpp
 
