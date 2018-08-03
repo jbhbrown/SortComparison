@@ -16,7 +16,6 @@
 //#include "customer_data.csv"
 
 int main(int argc, const char * argv[]) {
-    std::cout << "starting\n";
     int elCount = 0;
     std::vector <int> vec;
     //std::ifstream ip("customer_data.csv");
@@ -58,6 +57,24 @@ int main(int argc, const char * argv[]) {
         vec.push_back(Delicassen_int); elCount++;
     }
     std::cout << "Vector is " << elCount << " elements in size.\n";
+    
+    
+    int elCount2 = 0;
+    std::vector <int> vec2;
+    std::ifstream largeData;
+    largeData.open("diabetic_data.csv");
+    if(!largeData.is_open()) {
+        std::cout << "Error, file is not open.\n";
+    }
+    std::string line1;
+    int line1_int;
+    while(largeData.good()) {
+        std::getline(largeData, line1);
+        line1_int = stoi(line1);
+        vec2.push_back(line1_int); elCount2++;
+    }
+    std::cout << "Vector2 is " << elCount2 << " elements in size.\n";
+
     
     return 0;
 }
