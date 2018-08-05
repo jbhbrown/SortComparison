@@ -15,7 +15,18 @@
 #include "MergeSort.hpp"
 //#include "customer_data.csv"
 
+
+void printVector(std::vector<int> vec) {
+    for(int i = 0; i < vec.size(); i++){
+        std::cout << vec[i] << ", ";
+        if(i % 25 == 0)
+            std::cout << "\n";
+    }
+}
+
+
 int main(int argc, const char * argv[]) {
+    /* small dataset -- 2002 ints -- "customer_data.csv" */
     int elCount = 0;
     std::vector <int> vec;
     //std::ifstream ip("customer_data.csv");
@@ -57,24 +68,50 @@ int main(int argc, const char * argv[]) {
         vec.push_back(Delicassen_int); elCount++;
     }
     std::cout << "Vector is " << elCount << " elements in size.\n";
+    //printVector(vec);
+    qs<int> *quick_small = new qs<int>;
+    //quick_small -> quicksort(vec, vec[vec.size()/2]);
+    std::cout << "Quicksorting...\n";
+    quick_small -> quicksort(vec, int(vec.size()/2));
+    if(quick_small -> successful) {
+        std::cout << "Quicksort successful.\n";
+        //printVector(vec);
+        std::cout << "Time to Quicksort: " << quick_small -> duration << " sec.\n";
+    }
+    else {
+        std::cout << "Sort failed.\n";
+    }
     
     
+    /* large dataset -- 101766 ints -- "diabetic_data.csv" */
     int elCount2 = 0;
     std::vector <int> vec2;
     std::ifstream largeData;
-    largeData.open("diabetic_data.csv");
+    largeData.open("DJIA.csv");
     if(!largeData.is_open()) {
-        std::cout << "Error, file is not open.\n";
+        std::cout << "\nError, file is not open.\n";
     }
     std::string line1;
     int line1_int;
     while(largeData.good()) {
         std::getline(largeData, line1);
-        line1_int = stoi(line1);
+        line1_int = stoi(line1)/10;
         vec2.push_back(line1_int); elCount2++;
     }
-    std::cout << "Vector2 is " << elCount2 << " elements in size.\n";
-
-    
+    std::random_shuffle(vec2.begin(), vec2.end());      // shuffle elements in vec2
+    std::cout << "\nVector2 is " << elCount2 << " elements in size.\n";
+    //printVector(vec2);
+    qs<int> *quick_large = new qs<int>;
+    //quick_large -> quicksort(vec2, vec2[vec2.size()/2]);
+    std::cout << "Quicksorting...\n";
+    quick_large -> quicksort(vec2, int(vec2.size()/2));
+    if(quick_large -> successful) {
+        std::cout << "Quicksort successful.\n";
+        std::cout << "Time to Quicksort: " << quick_large -> duration << " sec.\n";
+    }
+    else {
+        std::cout << "Sort failed.\n";
+    }
+    std::cout << "\n";
     return 0;
 }
