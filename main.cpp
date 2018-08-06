@@ -5,38 +5,52 @@
 //
 //#include "MergeSort.hpp"
 
-#include <iostream>
+#include<iostream>
 #include <fstream>
 #include <vector>
+#include <ctime>
 using namespace std;
 
 //create a class MergeSort
 class MergeSort{
 public:
     int no_of_elements;
-    //int elements[];
-    std::vector <int> elements;
+    //vector<int> elements;
+    int elements[3010];
+    int time = 0;
+    double duration;
 public:
-    void getarray(std::vector<int>);
-    void partition(std::vector<int> ,int ,int);
-    void sortit(std::vector<int>, int , int, int);
+    void getarray(int[], int size);
+    void partition(int[] ,int ,int);
+    void sortit(int[], int , int, int);
     void display();
 };
 
 // get the array to be sorted from the user
-void MergeSort::getarray(std::vector<int> vec){
-    no_of_elements = int(vec.size())-1;
-    for(int i=0; i<no_of_elements; i++){
-        elements.push_back(vec[i]);
+void MergeSort::getarray(int temp[], int size){
+    /*
+     cout<<"How many elements?: ";
+     cin>>no_of_elements;
+     cout<<"Insert elements to sort: ";
+     for(int i=0;i<no_of_elements;i++){
+     cin>>elements[i];
+     }
+     */
+    no_of_elements = size;
+    for(int i=0; i<no_of_elements; i++) {
+        elements[i] = temp[i];
     }
 }
 
 // recursively divide the array into sub arrays until all sub
 // arrays contain only one element
-void MergeSort::partition(std::vector<int> elements, int low, int high){
+void MergeSort::partition(int elements[], int low, int high){
+    std::clock_t start;
+    start = std::clock();
+    duration = 0;
     int mid;
     if(low<high){
-        mid=int(low+high)/2;
+        mid=(low+high)/2;
         // sort the left sub array
         partition(elements,low,mid);
         
@@ -47,11 +61,11 @@ void MergeSort::partition(std::vector<int> elements, int low, int high){
         sortit(elements,low,mid,high);
         
     }
+     duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
 }
-void MergeSort::sortit(std::vector<int> elements, int low, int mid, int high){
-    int i,j,k,l/*,b[20]*/;
-    vector<int> b ;
-    b.reserve(elements.size()*2);
+void MergeSort::sortit(int elements[], int low, int mid, int high){
+    int i,j,k,l,b[6020];
+    //vector<int> b;
     l=low;
     i=low;
     j=mid+1;
@@ -87,8 +101,10 @@ void MergeSort::display(){
     }
 }
 
+
 int main(){
-    /* small dataset -- 504 ints */
+    /* small dataset */
+    /* small dataset -- 2002 ints -- "customer_data.csv" */
     int elCount = 0;
     std::vector <int> vec;
     std::ifstream smallData;
@@ -130,36 +146,51 @@ int main(){
     }
     std::cout << "Vector is " << elCount << " elements in size.\n";
     
-    
-    
-    /* large dataset -- 3000 ints -- "diabetic_data.csv" */
-    /*
-     int elCount2 = 0;
-     std::vector <int> vec2;
-     std::ifstream largeData;
-     largeData.open("DJIA.csv");
-     if(!largeData.is_open()) {
-     std::cout << "\nError, file is not open.\n";
-     }
-     std::string line1;
-     int line1_int;
-     while(largeData.good()) {
-     std::getline(largeData, line1);
-     line1_int = stoi(line1)/10;
-     vec2.push_back(line1_int); elCount2++;
-     }
-     std::random_shuffle(vec2.begin(), vec2.end());      // shuffle elements in vec2
-     std::cout << "\nVector2 is " << elCount2 << " elements in size.\n";
-     */
-    
-    
-    /* array1 */
+    int temp[vec.size()];
+    int size = 0;
+    for(int i=0; i < vec.size(); i++) {
+        temp[i] = vec[i];
+        size++;
+    }
     MergeSort MS;
-    MS.getarray(vec);
+    MS.getarray(temp, size);
+    cout << MS.no_of_elements;
     MS.partition(MS.elements,0,MS.no_of_elements);
     MS.display();
+    std::cout << "Time to Mergesort: " << MS.duration << " sec.\n";
     
-    /* array2 */
+    
+    /* large dataset */
+    int elCount2 = 0;
+    std::vector <int> vec2;
+    std::ifstream largeData;
+    largeData.open("DJIA.csv");
+    if(!largeData.is_open()) {
+        std::cout << "\nError, file is not open.\n";
+    }
+    std::string line1;
+    int line1_int;
+    while(largeData.good()) {
+        std::getline(largeData, line1);
+        line1_int = stoi(line1)/10;
+        vec2.push_back(line1_int); elCount2++;
+    }
+    std::random_shuffle(vec2.begin(), vec2.end());      // shuffle elements in vec2
+    std::cout << "\nVector2 is " << elCount2 << " elements in size.\n";
+    
+    int temp2[vec2.size()];
+    int size2 = 0;
+    for(int i=0; i < vec2.size(); i++) {
+        temp2[i] = vec2[i];
+        size2++;
+    }
+    MergeSort MS2;
+    MS2.getarray(temp2, size2);
+    cout << MS2.no_of_elements;
+    MS2.partition(MS2.elements,0,MS2.no_of_elements);
+    MS2.display();
+    std::cout << "Time to Mergesort: " << MS2.duration << " sec.\n";
+    
     return 0;
 }
 
